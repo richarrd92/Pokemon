@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Project 3</title>
+    <!-- XLSX library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            background-color: rgb(27, 25, 25);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #heading {
+            color: white;
+            font-family: sans-serif;
+            font-size: 60px;
+            text-align: center;
+        }
+
+        #menu {
+            width: 350px;
+            margin: 0 auto;
+            text-align: center;
+            padding-top: 100px;
+        }
+        #menu button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 18px;
+            border-radius: 10px;
+            font-weight: bolder;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            background-color: #2b8bf2;
+            animation: blink 1.9s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% {
+                background-color: #3d93ef;
+            }
+            50% {
+                background-color: #fadd3b;
+            }
+        }
+
+        #menu button:hover {
+            opacity: 0.6; 
+        }
+
+        #screen-container {
+            display: none;
+            position: relative;
+            width: 1280px;
+            height: 720px;
+        }
+
+        #screen {
+            border: 1px solid #000000;
+            display: block;
+        }
+
+        #SoundSettings {
+            display: none;
+            z-index: 1;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #SoundSettingsDisplay {
+            background-color: rgb(180, 179, 179);
+            padding: 10px;
+            text-align: center;
+            border-radius: 20px;
+            font-family: sans-serif;
+            width: 400px;
+            font-size: 15px;
+            position: absolute;
+            top: 57%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #MenuOptionButton {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 10px;
+            font-size: 18px;
+            border-radius: 10px;
+            opacity: 0.5; 
+            color: white;
+        }
+
+        #MenuOptionButton:hover {
+            opacity: 1; 
+        }
+
+
+        #HelpDisplay {
+            background-color: rgb(180, 179, 179);
+            padding: 15px;
+            text-align: center;
+            border-radius: 10px;
+            font-family: sans-serif;
+            width: 400px;
+            font-size: 15px;
+            position: absolute;
+            top: 57%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+
+        #fightMenu {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: black;
+            padding: 5px;
+            border-radius: 10px;
+            display: grid;
+            gap: 10px;
+            width: 277px;
+        }
+
+        .menu-item {
+            padding: 5px;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            background-color: black;
+            color: #FFFFFF;
+            border: none;
+            font-size: 20px;
+        }
+
+        .menu-item:hover {
+            opacity: 0.8;
+        }
+
+        .menu-item-attack {
+            background-color: rgba(255, 0, 0, 0.7);
+        }
+
+        .menu-item-pokemon {
+            background-color: rgba(0, 255, 0, 0.7);
+        }
+
+        .menu-item-run {
+            background-color: rgba(0, 0, 255, 0.7);
+        }
+
+        .menu-item-item {
+            background-color: rgba(255, 247, 0, 0.7);
+        }
+
+        #itemMenu {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: black;
+            padding: 5px;
+            border-radius: 10px;
+            gap: 10px;
+            width: 277px;
+        }
+
+        .itemmenu-item {
+            padding: 5px;
+            border-radius: 10px;
+            cursor: pointer;
+            background-color: black;
+            color: #FFFFFF;
+            border: none;
+            font-size: 20px;
+        }
+
+        .itemmenu-item:hover {
+            opacity: 0.8;
+        }
+
+        .itemmenu-item-health {
+            background-color: rgba(0, 255, 0, 0.7);
+            width: 150px
+        }
+
+        .itemmenu-item-pokeball{
+            background-color: rgba(0, 0, 255, 0.7);
+            width: 150px
+        }
+        
+        #poke {
+            list-style-type: none;
+            padding: 0;
+        }
+        #poke li {
+            padding: 8px;
+            background: #f0f0f0;
+            margin-bottom: 4px;
+            cursor: pointer;
+        }
+        #poke li:hover {
+            background: #ddd;
+			}
+		</style>
+	</head>
+	<body>
+	<ul id="poke"></ul>
+
+	<div style="display:block;" id="Loading">
+		<h1>Loading...</h1>
+	</div>
+	<div style="display:none;" id="CompletedLoading">
+
+		<div id="menu">
+			<h1 id="heading">POKEMON</h1>
+			<button id="PlayButton">Play</button>
+			<button id="HelpButton">Help</button>
+			<button id="SoundSettingsButton">Sound</button>
+			<button id="QuitButton">Quit</button>
+		</div>
+		<div id="screen-container">
+			<canvas id="screen" width="1280" height="720"></canvas>
+			<button id="MenuOptionButton">Main Menu</button>
+			<div id="fightMenu">
+				<button class="menu-item menu-item-attack">Attack</button>
+				<button class="menu-item menu-item-pokemon">Pokemon</button>
+				<button class="menu-item menu-item-run">Run</button>
+				<button class="menu-item menu-item-item">Item</button>
+			</div>
+			<div id="itemMenu">
+				<button class="itemmenu-item itemmenu-item-health">Health Potion</button>
+				<button class="itemmenu-item itemmenu-item-pokeball">CAPTURE POKEMON</button>
+                <button class="itemmenu-item itemmenu-item-close">Close</button>
+			</div>
+		</div>
+		<!--this is just example audio we can change it later-->
+		<div id="SoundSettings" style="display: none;">
+			<div id="SoundSettingsDisplay">
+				<h2>Sound Settings</h2>
+				<label for="volumeControl">Volume: </label>
+				<input type="range" id="volumeControl" min="0" max="100" value="50" />
+				<br /><br />
+				<button id="CloseSound">Close</button>
+			</div>
+		</div>
+		<!-- Battle Log -->
+		<div id="battleLog"></div>
+        <div id="HelpDisplay" style="overflow-y: auto; max-height: 230px; display: none;">
+            <div>
+                <button id="CloseHelp">Close</button>
+                <h2>Controls</h2>
+                <p style="text-align:left"> <b>Pokemon movement</b> <br>
+                Move left: left arrow key or a-button<br>
+                Move right: right arrow key or d-button<br>
+                Move up: up arrow key or w-button<br>
+                Move down: down arrow key or s-button</p>
+
+                <p style="text-align:left"> <b>Fight Menu Controls</b><br>
+                Attack: To attack the enemy<br>
+                Pokemon: Display player pokemon(s)<br>
+                Run: Quit battle<br>
+                Item: Capture pokemon or use Health potion </p>
+
+                <p style="text-align:left"> <b>Main menu</b><br>
+                Return to Main page<br></p>
+
+                <h2>About the Game</h2>
+                <p style="text-align:left">Select Starter Pokemon: Choose your starting Pokemon from Bulbasaur,
+                     Charmander, or Squirtle. Click the "Select" button below your chosen Pokemon to start your adventure.</p>
+
+                <h2>World Exploration</h2>
+                <p style="text-align:left">Move around the game world to discover new areas and Pokemon. 
+                    Your selected starter Pokemon will accompany you on your journey.</p>
+
+                <h2>Encountering Pokemon</h2>
+                <p style="text-align:left">Encounter various Pokemon based on the terrain you are exploring. 
+                    Engage in battles to capture new Pokemon or train your existing ones.</p>
+
+                <h2>Game Scenes</h2>
+                <p style="text-align:left">Experience different scenes such as the open world, Pokemon selection, and battle scenes. 
+                    The game transitions between scenes based on your actions. 
+                    Enjoy playing the game and aim to become the ultimate Pokemon trainer!</p>   
+            </div>
+        </div>
+        </div>
+        
+	</div>
+	<script type="module" src="proj3.js"></script>
+	<script>
+		document.getElementById("PlayButton").addEventListener("click", function() {
+			document.getElementById("menu").style.display = "none";
+			document.getElementById("screen-container").style.display = "block";
+		});
+
+    document.getElementById("MenuOptionButton").addEventListener("click", function() {
+        document.getElementById("screen-container").style.display = "none";
+        document.getElementById("menu").style.display = "flex";
+        document.getElementById("menu").style.flexDirection = "column";
+        document.getElementById("heading").textContent = "Main Menu";
+    });
+
+    document.getElementById("SoundSettingsButton").addEventListener("click", function() {
+        document.getElementById("SoundSettings").style.display = "none";
+    });
+
+    document.getElementById("CloseSound").addEventListener("click", function() {
+        document.getElementById("SoundSettings").style.display = "none";
+    });
+
+    document.getElementById("HelpButton").addEventListener("click", function() {
+        document.getElementById("HelpDisplay").style.display = "block";
+    });
+
+    document.getElementById("CloseHelp").addEventListener("click", function() {
+        document.getElementById("HelpDisplay").style.display = "none";
+    });
+
+    // Logic to handle item button click
+    document.querySelector(".menu-item.menu-item-item").addEventListener("click", function() {
+        document.getElementById("fightMenu").style.display = "none";
+        document.getElementById("itemMenu").style.display = "grid"; 
+    });
+
+    // Logic to handle health or defense potion click
+    document.querySelector(".itemmenu-item.itemmenu-item-health").addEventListener("click", function() {
+        document.getElementById("fightMenu").style.display = "grid"; 
+        document.getElementById("itemMenu").style.display = "none";
+    });
+
+		document.querySelector(".itemmenu-item.itemmenu-item-pokeball").addEventListener("click", function() {
+			document.getElementById("fightMenu").style.display = "grid"; 
+			document.getElementById("itemMenu").style.display = "none";
+		});
+    document.querySelector(".itemmenu-item.itemmenu-item-close").addEventListener("click", function() {
+        document.getElementById("fightMenu").style.display = "grid"; 
+        document.getElementById("itemMenu").style.display = "none";
+    });
+	</script>
+	</body>
+</html>
