@@ -1,4 +1,4 @@
-# Pokemon_Battle
+# Pokemon
 
 As part of a team of four, we developed a web-based game named "Pokémon Battle" using a combination of PHP, SQL, HTML, CSS, and JavaScript. Our project was centered around creating an engaging and interactive game where Pokémon battle for supremacy. Here's a detailed breakdown of our work:
 
