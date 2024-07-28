@@ -1,6 +1,6 @@
 # Pokemon
 
-As part of a team of four, we developed a web-based game named "Pokémon Battle" using a combination of PHP, SQL, HTML, CSS, and JavaScript. Our project was centered around creating an engaging and interactive game where Pokémon battle for supremacy. Here's a detailed breakdown of our work:
+As part of a team of four, we developed a web-based game named "Pokémon" using a combination of PHP, SQL, HTML, CSS, and JavaScript. Our project was centered around creating an engaging and interactive game where Pokémon battle for supremacy. Here's a detailed breakdown of our work:
 
 # Frontend Development
 We utilized HTML and CSS to craft an intuitive and visually appealing user interface. This included designing various game screens, such as the battle arena and menus, ensuring a seamless user experience.
